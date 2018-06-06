@@ -233,6 +233,18 @@ System.register(['./canvas-metric', './distinct-points', 'lodash', 'jquery', 'mo
                             return map.text;
                         }
                     }
+                    if (!isNull && this.panel.versionEncoding) {
+                        var versionSegments = this.panel.versionEncoding.split(".");
+                        var versionString = "";
+                        var bytesDecoded = 0;
+                        for (var i = 0; i < versionSegments.length; i++) {
+                            var segmentByteCount = parseInt(versionSegments[i]);
+                            var segmentInt = ((val >> bytesDecoded) & (Math.pow(2, segmentByteCount) - 1));
+                            versionString = segmentInt + "." + versionString;
+                            bytesDecoded += segmentByteCount;
+                        }
+                        return versionString.substring(0, versionString.length - 1);
+                    }
                     if (isNull) {
                         return 'null';
                     }

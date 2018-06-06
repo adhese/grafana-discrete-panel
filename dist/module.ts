@@ -259,6 +259,19 @@ class DiscretePanelCtrl extends CanvasPanelCtrl {
       }
     }
 
+    if (!isNull && this.panel.versionEncoding) {
+      var versionSegments = this.panel.versionEncoding.split(".");
+      var versionString = "";
+      var bytesDecoded = 0;
+      for (let i = 0; i < versionSegments.length; i++) {
+        let segmentByteCount = parseInt(versionSegments[i]);
+        let segmentInt = ((val >> bytesDecoded) & (Math.pow(2, segmentByteCount) - 1));
+        versionString = segmentInt + "." + versionString;
+        bytesDecoded += segmentByteCount;
+      }
+      return versionString.substring(0, versionString.length - 1);
+    }
+
     if (isNull) {
       return 'null';
     }
